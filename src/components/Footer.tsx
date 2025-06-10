@@ -78,7 +78,7 @@ const Footer: React.FC = () => {
             <p className="mb-2">
               Built with React, TypeScript, and Tailwind CSS
             </p>
-            <p className="text-sm sm:text-base font-bold mt-2">
+            <p className="text-lg sm:text-xl font-bold">
               <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                 Loved by +{formatViews(counter)}
               </span>
