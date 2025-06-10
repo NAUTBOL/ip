@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Twitter, Linkedin, Github } from 'lucide-react';
+import { API_URL } from '../core/config';
 
 const Footer: React.FC = () => {
+  const [counter, setCounter] = useState(0);
+
+  const fetchCounterData = async () => {
+    const url = API_URL + "counters/total/ip";
+    const response = await fetch(url);
+    if (!response.ok) {
+      setCounter(0);
+    }
+    const data = await response.json();
+    setCounter(data.counter);
+  };
+
+  const formatViews = (num: number) => {
+    return new Intl.NumberFormat('en', {
+      notation: 'compact',
+      compactDisplay: 'short',
+    }).format(num);
+  };
+
+  useEffect(() => {
+    fetchCounterData();
+  }, []);
+
   const socialLinks = [
     {
       name: 'Twitter',
@@ -42,17 +66,22 @@ const Footer: React.FC = () => {
                   className={`group flex items-center justify-center w-14 h-14 bg-vercel-light-gray/50 rounded-full transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-vercel-black ${social.bgColor}`}
                   aria-label={`Visit ${social.name} profile`}
                 >
-                  <IconComponent 
-                    className={`w-6 h-6 text-vercel-text-secondary transition-colors duration-300 group-hover:scale-110 ${social.color}`} 
+                  <IconComponent
+                    className={`w-6 h-6 text-vercel-text-secondary transition-colors duration-300 group-hover:scale-110 ${social.color}`}
                   />
                 </a>
               );
             })}
           </div>
-          
+
           <div className="text-vercel-text-secondary font-montserrat text-sm">
             <p className="mb-2">
               Built with React, TypeScript, and Tailwind CSS
+            </p>
+            <p className="text-sm sm:text-base font-bold mt-2">
+              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                Loved by +{formatViews(counter)}
+              </span>
             </p>
           </div>
         </div>
