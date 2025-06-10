@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Wifi, MapPin } from 'lucide-react';
+import { API_URL } from '../core/config';
 
 interface IPData {
   ip: string;
@@ -12,14 +13,12 @@ const Hero: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Mock API call to simulate fetching IP data
   const fetchIPData = async (): Promise<IPData> => {
-    const url = 'https://3vpzl2blwd4hhh7fdwpcoytnxa0ppqtr.lambda-url.eu-north-1.on.aws/';
+    const url = API_URL + "ip/info";
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`${response.status}`);
     }
-    // Según lo que mencionas, el JSON tiene solo { "ip": "..." }
     const data = await response.json();
     return data as IPData;
   };
@@ -58,11 +57,6 @@ const Hero: React.FC = () => {
     };
 
     getIPData();
-  };
-
-  const handleCopy = () => {
-    if (!ipData?.ip) return;
-    navigator.clipboard.writeText(ipData.ip);
   };
 
   return (
@@ -154,14 +148,6 @@ const Hero: React.FC = () => {
                 className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-montserrat font-medium rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-vercel-gray"
               >
                 Refresh IP
-              </button>
-
-              <button
-                onClick={handleCopy}
-                disabled={!ipData?.ip}
-                className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 font-montserrat font-medium rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-vercel-gray disabled:opacity-50 disabled:cursor-not-allowed ml-4"
-              >
-                Copy IP
               </button>
             </div>
           ) : null}
